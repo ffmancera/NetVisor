@@ -7,3 +7,4 @@ edition = "2021"
 
 [dependencies]
 femtovg = "0.9.0"
+nispor = "1.2.17"
