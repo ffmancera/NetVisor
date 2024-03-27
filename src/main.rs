@@ -2,9 +2,9 @@ mod network;
 
 use std::io::Write;
 
-use env_logger::Builder;
 use clap::{Parser, Subcommand};
-use log::{LevelFilter};
+use env_logger::Builder;
+use log::{error, LevelFilter};
 
 use crate::network::query_network;
 
@@ -33,11 +33,15 @@ fn main() {
     builder.format(|buf, record| writeln!(buf, "{} - {}", record.level(), record.args()));
 
     if cli.debug {
-        builder.filter_level(LevelFilter::Debug);
+        builder.filter(Some("netvisor"), LevelFilter::Debug);
     } else {
-        builder.filter_level(LevelFilter::Info);
+        builder.filter(Some("netvisor"), LevelFilter::Info);
     }
     builder.init();
 
-    println!("{:?}", query_network().unwrap());
+    let network_state = query_network();
+    match network_state {
+        Ok(v) => println!("{:?}", v),
+        Err(_) => error!("Error when fetching the host network configuration."),
+    };
 }
