@@ -1,3 +1,4 @@
+mod graphics;
 mod network;
 
 use std::io::Write;
@@ -6,6 +7,7 @@ use clap::{Parser, Subcommand};
 use env_logger::Builder;
 use log::{error, LevelFilter};
 
+use crate::graphics::draw_picture;
 use crate::network::query_network;
 
 /// Host network topology visualization tool.
@@ -44,4 +46,6 @@ fn main() {
         Ok(v) => println!("{:?}", v),
         Err(_) => error!("Error when fetching the host network configuration."),
     };
+
+    draw_picture();
 }
