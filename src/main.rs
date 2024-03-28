@@ -44,7 +44,10 @@ fn main() {
     let network_state = query_network();
     match network_state {
         Ok(v) => println!("{:?}", v),
-        Err(_) => error!("Error when fetching the host network configuration."),
+        Err(_) => {
+            error!("Error when fetching the host network configuration.");
+            return;
+        },
     };
 
     draw_picture();
