@@ -24,8 +24,12 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Commands {
-    /// Shows the diagram of the network topology
-    Show,
+    /// Generate the image representing the network topology
+    Show {
+        /// specify the output path
+        #[arg(short, long)]
+        file: Option<String>,
+    },
 }
 
 fn main() {
@@ -47,8 +51,14 @@ fn main() {
         Err(_) => {
             error!("Error when fetching the host network configuration.");
             return;
-        },
+        }
     };
 
-    draw_picture();
+    match &cli.command {
+        Some(Commands::Show { file }) => match file {
+            Some(path) => draw_picture(path),
+            None => draw_picture(&"output".to_string()),
+        },
+        None => {}
+    }
 }
