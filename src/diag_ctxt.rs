@@ -1,15 +1,15 @@
 use gethostname::gethostname;
 
-struct Context {
+struct DiagramCtxt {
     hostname: String,
 }
 
-impl Context {
-    fn new() -> Context {
+impl DiagramCtxt {
+    fn new() -> DiagramCtxt {
         let host = match gethostname().to_str() {
             Some(v) => v.to_string(),
             None => "host".to_string(),
         };
-        Context { hostname: host, }
+        DiagramCtxt { hostname: host }
     }
 }

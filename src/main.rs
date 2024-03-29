@@ -1,4 +1,4 @@
-mod context;
+mod diag_ctxt;
 mod graphics;
 mod network;
 
