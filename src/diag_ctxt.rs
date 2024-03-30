@@ -3,14 +3,14 @@ use nispor::{Iface, NisporError};
 
 use crate::network::query_network;
 
-struct IfaceCtxt {
-    iface: Iface,
+pub struct IfaceCtxt {
+    pub iface: Iface,
     depth: u32,
 }
 
 pub struct DiagramCtxt {
     pub hostname: String,
-    ifaces: Vec<IfaceCtxt>,
+    pub ifaces: Vec<IfaceCtxt>,
 }
 
 impl DiagramCtxt {
