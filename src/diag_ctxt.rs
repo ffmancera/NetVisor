@@ -1,5 +1,7 @@
 use gethostname::gethostname;
-use nispor::Iface;
+use nispor::{Iface, NisporError};
+
+use crate::network::query_network;
 
 struct IfaceCtxt {
     iface: Iface,
@@ -12,11 +14,24 @@ pub struct DiagramCtxt {
 }
 
 impl DiagramCtxt {
-    pub fn new() -> DiagramCtxt {
+    pub fn new() -> Result<DiagramCtxt, NisporError> {
         let host = match gethostname().to_str() {
             Some(v) => v.to_string(),
             None => "host".to_string(),
         };
-        DiagramCtxt { hostname: host, ifaces: Vec::new() }
+        let network_state = query_network()?;
+        let iface_ctxts = network_state
+            .ifaces
+            .values()
+            .cloned()
+            .map(|np_iface| IfaceCtxt {
+                iface: np_iface,
+                depth: 0,
+            })
+            .collect();
+        Ok(DiagramCtxt {
+            hostname: host,
+            ifaces: iface_ctxts,
+        })
     }
 }

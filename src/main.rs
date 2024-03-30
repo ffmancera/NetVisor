@@ -6,11 +6,10 @@ use std::io::Write;
 
 use clap::{Parser, Subcommand};
 use env_logger::Builder;
-use log::{error, LevelFilter};
+use log::LevelFilter;
 
 use crate::diag_ctxt::DiagramCtxt;
 use crate::graphics::draw_picture;
-use crate::network::query_network;
 
 /// Host network topology visualization tool.
 #[derive(Parser)]
@@ -47,16 +46,9 @@ fn main() {
     }
     builder.init();
 
-    let network_state = query_network();
-    match network_state {
-        Ok(v) => println!("{:?}", v),
-        Err(_) => {
-            error!("Error when fetching the host network configuration.");
-            return;
-        }
-    };
+    let diag_ctxt =
+        DiagramCtxt::new().expect("Error when fetching the host network configuration.");
 
-    let diag_ctxt = DiagramCtxt::new();
     match &cli.command {
         Some(Commands::Show { file }) => match file {
             Some(path) => draw_picture(diag_ctxt, path),
