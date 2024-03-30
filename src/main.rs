@@ -8,6 +8,7 @@ use clap::{Parser, Subcommand};
 use env_logger::Builder;
 use log::{error, LevelFilter};
 
+use crate::diag_ctxt::DiagramCtxt;
 use crate::graphics::draw_picture;
 use crate::network::query_network;
 
@@ -55,10 +56,11 @@ fn main() {
         }
     };
 
+    let diag_ctxt = DiagramCtxt::new();
     match &cli.command {
         Some(Commands::Show { file }) => match file {
-            Some(path) => draw_picture(path),
-            None => draw_picture(&"output".to_string()),
+            Some(path) => draw_picture(diag_ctxt, path),
+            None => draw_picture(diag_ctxt, &"output".to_string()),
         },
         None => {}
     }

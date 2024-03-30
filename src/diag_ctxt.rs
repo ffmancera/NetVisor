@@ -1,11 +1,11 @@
 use gethostname::gethostname;
 
-struct DiagramCtxt {
-    hostname: String,
+pub struct DiagramCtxt {
+    pub hostname: String,
 }
 
 impl DiagramCtxt {
-    fn new() -> DiagramCtxt {
+    pub fn new() -> DiagramCtxt {
         let host = match gethostname().to_str() {
             Some(v) => v.to_string(),
             None => "host".to_string(),
