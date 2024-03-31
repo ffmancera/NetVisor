@@ -1,4 +1,5 @@
 use cairo::{Context, Format, ImageSurface};
+use std::collections::HashMap;
 use std::fs::File;
 
 use crate::diag_ctxt::{DiagramCtxt, IfaceCtxt};
@@ -29,7 +30,7 @@ pub fn draw_picture(diag_ctx: DiagramCtxt, file: &String) {
     write_text_top_right_corner_rect(&context, initial_pos, initial_size, 25., &diag_ctx.hostname);
 
     // TODO: draw all the interfaces, this is just some initial work
-    let mut count: u32 = 0;
+    let mut counter: HashMap<u32, u32> = HashMap::new();
     for iface in diag_ctx.clone().ifaces {
         draw_iface_rect(
             &context,
@@ -37,9 +38,16 @@ pub fn draw_picture(diag_ctx: DiagramCtxt, file: &String) {
             initial_pos,
             initial_size,
             diag_ctx.clone().count_ifaces_for_depth(1) as u32,
-            count,
+            &counter,
         );
-        count = count + 1;
+        match counter.get(&iface.depth) {
+            Some(v) => {
+                counter.insert(iface.depth, v + 1);
+            }
+            None => {
+                counter.insert(iface.depth, 1);
+            }
+        }
     }
 
     let mut file = File::create(file).expect("Couldn’t create file");
@@ -54,10 +62,15 @@ fn draw_iface_rect(
     rect_pos: (f64, f64),
     rect_size: (f64, f64),
     total: u32,
-    count: u32,
+    counter: &HashMap<u32, u32>,
 ) {
     let iface_width = 300.;
     let iface_height = 100.;
+    let count = match counter.get(&iface_ctx.depth) {
+        Some(v) => *v,
+        None => 0 as u32,
+    };
+
     let pos = (
         rect_pos.0
             + ((rect_size.0 / total as f64) / 2. - iface_width / 2.)
