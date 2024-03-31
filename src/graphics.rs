@@ -37,7 +37,8 @@ pub fn draw_picture(diag_ctx: DiagramCtxt, file: &String) {
             &iface,
             initial_pos,
             initial_size,
-            diag_ctx.clone().count_ifaces_for_depth(1) as u32,
+            diag_ctx.clone().count_ifaces_for_depth(iface.depth) as u32,
+            diag_ctx.clone().max_depth(),
             &counter,
         );
         match counter.get(&iface.depth) {
@@ -61,7 +62,8 @@ fn draw_iface_rect(
     iface_ctx: &IfaceCtxt,
     rect_pos: (f64, f64),
     rect_size: (f64, f64),
-    total: u32,
+    total_hor: u32,
+    total_ver: u32,
     counter: &HashMap<u32, u32>,
 ) {
     let iface_width = 300.;
@@ -73,9 +75,11 @@ fn draw_iface_rect(
 
     let pos = (
         rect_pos.0
-            + ((rect_size.0 / total as f64) / 2. - iface_width / 2.)
-            + ((count as f64) * rect_size.0 / (total as f64)),
-        rect_pos.1 + (rect_size.1 / ((iface_ctx.depth as f64) + 1.) - (iface_height / 2.)),
+            + ((rect_size.0 / total_hor as f64) / 2. - iface_width / 2.)
+            + ((count as f64) * rect_size.0 / (total_hor as f64)),
+        rect_pos.1 + (rect_size.1 + (rect_size.1 / total_ver as f64)) / 2.
+            - (iface_height / 2.)
+            - ((iface_ctx.depth as f64 - 1.) * rect_size.1 / total_ver as f64),
     );
     rectangle_with_border(
         &context,
