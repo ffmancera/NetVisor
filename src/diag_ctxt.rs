@@ -3,11 +3,13 @@ use nispor::{Iface, NisporError};
 
 use crate::network::query_network;
 
+#[derive(Clone)]
 pub struct IfaceCtxt {
     pub iface: Iface,
-    depth: u32,
+    pub depth: u32,
 }
 
+#[derive(Clone)]
 pub struct DiagramCtxt {
     pub hostname: String,
     pub ifaces: Vec<IfaceCtxt>,
@@ -26,12 +28,19 @@ impl DiagramCtxt {
             .cloned()
             .map(|np_iface| IfaceCtxt {
                 iface: np_iface,
-                depth: 0,
+                depth: 1,
             })
             .collect();
         Ok(DiagramCtxt {
             hostname: host,
             ifaces: iface_ctxts,
         })
+    }
+
+    pub fn count_ifaces_for_depth(self, depth: u32) -> usize {
+        self.ifaces
+            .iter()
+            .filter(|iface| iface.depth == depth)
+            .count()
     }
 }
