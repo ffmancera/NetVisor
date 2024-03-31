@@ -9,6 +9,17 @@ pub struct IfaceCtxt {
     pub depth: u32,
 }
 
+impl IfaceCtxt {
+    fn calculate_iface_depth(np_iface: &Iface) -> u32 {
+        //TODO: this only calculates two different levels of depth, but the idea is to make it
+        //extend it in the future
+        match np_iface.controller {
+            Some(_) => 2,
+            None => 1,
+        }
+    }
+}
+
 #[derive(Clone)]
 pub struct DiagramCtxt {
     pub hostname: String,
@@ -27,10 +38,11 @@ impl DiagramCtxt {
             .values()
             .cloned()
             .map(|np_iface| IfaceCtxt {
-                iface: np_iface,
-                depth: 1,
+                iface: np_iface.clone(),
+                depth: IfaceCtxt::calculate_iface_depth(&np_iface),
             })
             .collect();
+
         Ok(DiagramCtxt {
             hostname: host,
             ifaces: iface_ctxts,
@@ -42,5 +54,16 @@ impl DiagramCtxt {
             .iter()
             .filter(|iface| iface.depth == depth)
             .count()
+    }
+
+    pub fn max_depth(self) -> u32 {
+        let mut depth: u32 = 1;
+        for iface_ctx in self.ifaces {
+            if iface_ctx.depth > depth {
+                depth = iface_ctx.depth;
+            }
+        }
+
+        depth
     }
 }

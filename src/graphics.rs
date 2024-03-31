@@ -81,6 +81,7 @@ fn draw_iface_rect(
 
 fn calculate_size(diag_ctx: &DiagramCtxt) -> (f64, f64) {
     let mut size = (300., 300.);
+    size.1 = size.1 + 100. * diag_ctx.clone().max_depth() as f64;
     for _ in diag_ctx.ifaces.clone() {
         size.0 = size.0 + 300.;
     }
