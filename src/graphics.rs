@@ -77,7 +77,9 @@ fn draw_iface_rect(
         rect_pos.0
             + ((rect_size.0 / total_hor as f64) / 2. - iface_width / 2.)
             + ((count as f64) * rect_size.0 / (total_hor as f64)),
-        rect_pos.1 + (rect_size.1 + (rect_size.1 / total_ver as f64)) / 2.
+        rect_pos.1
+            + (rect_size.1 - (rect_size.1 / total_ver as f64))
+            + ((rect_size.1 / total_ver as f64) / 2.)
             - (iface_height / 2.)
             - ((iface_ctx.depth as f64 - 1.) * rect_size.1 / total_ver as f64),
     );
