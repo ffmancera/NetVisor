@@ -28,6 +28,20 @@ cargo build
 
 The binary will be available at `target/debug/` path.
 
+### Dependencies
+
+The image generation is done through the [cairo
+library](https://www.cairographics.org/examples/) for GTK. In NetVisor we use
+`cairo-rs` but that requires the system to have `libcairo` installed.
+
+You can install it by doing:
+
+```bash
+dnf install cairo-devel # Fedora
+
+apt install libcairo2-dev # Ubuntu
+```
+
 ## Technology
 
 ### Language
