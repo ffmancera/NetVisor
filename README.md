@@ -17,6 +17,17 @@ The project is aim to be used on GNU/Linux systems and currently the idea of
 supporting other operative systems is out of the table. Having said this, the
 situation could change in the future.
 
+## Compilation
+
+In order to compile the project [Cargo](https://doc.rust-lang.org/cargo/) is
+required. The recommended way to do it is by doing:
+
+```rust
+cargo build
+```
+
+The binary will be available at `target/debug/` path.
+
 ## Technology
 
 ### Language
