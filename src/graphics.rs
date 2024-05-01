@@ -31,7 +31,7 @@ pub fn draw_picture(diag_ctx: DiagramCtxt, file: &String) {
 
     // TODO: draw all the interfaces, this is just some initial work
     let mut counter: HashMap<u32, u32> = HashMap::new();
-    for iface in diag_ctx.clone().ifaces {
+    for iface in diag_ctx.clone().ifaces.values() {
         draw_iface_rect(
             &context,
             &iface,
